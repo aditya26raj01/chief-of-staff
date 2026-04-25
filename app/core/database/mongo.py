@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, cast
 
 from beanie import init_beanie
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -7,7 +7,7 @@ from app.core.config import settings
 from app.core.logger import logger
 
 # In the future, import your models here and add them to this list.
-# For example: from app.models.base import SampleModel
+# For example: from app.models.mongo_base import SampleModel
 DOCUMENT_MODELS: list[Any] = []
 
 
@@ -30,7 +30,7 @@ async def init_db() -> AsyncIOMotorClient[Any]:
 
         # Initialize Beanie with the selected database and document models
         await init_beanie(
-            database=client[settings.MONGODB_DB_NAME],
+            database=cast(Any, client[settings.MONGODB_DB_NAME]),
             document_models=DOCUMENT_MODELS,
         )
 
