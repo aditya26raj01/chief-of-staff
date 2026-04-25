@@ -11,7 +11,7 @@ from app.core.config import settings
 # DOCUMENT_MODELS = [SampleModel]
 DOCUMENT_MODELS: list[Any] = []
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("uvicorn.error")
 
 
 async def init_db() -> None:
