@@ -21,6 +21,8 @@ class Settings(BaseSettings):
 
     # Database
     DATABASE_URL: str | None = None
+    MONGODB_URL: str = "mongodb://localhost:27017"
+    MONGODB_DB_NAME: str = "chief_of_staff_db"
 
     # App environment
     ENVIRONMENT: str = "dev"

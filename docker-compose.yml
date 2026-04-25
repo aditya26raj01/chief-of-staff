@@ -1,0 +1,14 @@
+services:
+  mongodb:
+    image: mongo:7.0
+    container_name: chief-of-staff-mongodb
+    restart: always
+    environment:
+      MONGO_INITDB_DATABASE: chief_of_staff_db
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+
+volumes:
+  mongodb_data:
