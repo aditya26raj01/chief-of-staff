@@ -1,17 +1,14 @@
-import logging
 from typing import Any
 
 from beanie import init_beanie
 from motor.motor_asyncio import AsyncIOMotorClient
 
 from app.core.config import settings
+from app.core.logger import logger
 
 # In the future, import your models here and add them to this list.
 # For example: from app.models.base import SampleModel
-# DOCUMENT_MODELS = [SampleModel]
 DOCUMENT_MODELS: list[Any] = []
-
-logger = logging.getLogger("uvicorn.error")
 
 
 async def init_db() -> AsyncIOMotorClient[Any]:
