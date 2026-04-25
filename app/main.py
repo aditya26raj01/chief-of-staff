@@ -1,3 +1,4 @@
+import logging
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
@@ -10,9 +11,11 @@ from app.core.db import init_db
 @asynccontextmanager
 async def lifespan(app: FastAPI):  # type: ignore
     # Initialize database
-    await init_db()
+    client = await init_db()
     yield
-    # Cleanup code can go here (e.g., closing motor client)
+    # Cleanup code
+    client.close()
+    logging.getLogger("uvicorn.error").info("MongoDB connection closed.")
 
 
 app = FastAPI(

@@ -14,7 +14,7 @@ DOCUMENT_MODELS: list[Any] = []
 logger = logging.getLogger("uvicorn.error")
 
 
-async def init_db() -> None:
+async def init_db() -> AsyncIOMotorClient[Any]:
     """
     Initialize the MongoDB connection and Beanie ODM.
     """
@@ -38,6 +38,7 @@ async def init_db() -> None:
         )
 
         logger.info("Beanie ODM initialized successfully.")
+        return client
     except Exception as e:
         logger.error(f"Failed to connect to MongoDB: {e}")
         # Raising the exception here will cause the FastAPI application startup to fail.
