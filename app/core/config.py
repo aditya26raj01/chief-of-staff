@@ -113,9 +113,6 @@ class Settings(BaseSettings):
     # App environment
     ENVIRONMENT: str = "dev"
 
-    # Secrets
-    SECRET_KEY: str | None = None
-
     model_config = SettingsConfigDict(env_file=".env", case_sensitive=True)
 
 
