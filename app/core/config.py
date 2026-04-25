@@ -24,15 +24,16 @@ class Settings(BaseSettings):
     MONGODB_DB_NAME: str = "chief_of_staff_db"
 
     # PostgreSQL Settings
-    POSTGRES_SERVER: str = "localhost"
-    POSTGRES_USER: str = "postgres"
-    POSTGRES_PASSWORD: str = "password"
-    POSTGRES_DB: str = "chief_of_staff_pg"
-    POSTGRES_PORT: int = 5432
+    POSTGRES_URL: str = "postgresql://postgres:password@localhost:5432/chief_of_staff_pg"
+    POSTGRES_DB_NAME: str = "chief_of_staff_pg"
 
     @property
     def SQLALCHEMY_DATABASE_URI(self) -> str:
-        return f"postgresql+asyncpg://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@{self.POSTGRES_SERVER}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
+        """Ensure the URL uses the asyncpg driver."""
+        url = self.POSTGRES_URL
+        if url.startswith("postgresql://"):
+            url = url.replace("postgresql://", "postgresql+asyncpg://", 1)
+        return url
 
     # App environment
     ENVIRONMENT: str = "dev"
