@@ -12,7 +12,7 @@ if TYPE_CHECKING:
     from app.auth.user_entity import User
 
 
-class OAuthProvider(str, enum.Enum):
+class OAuthProvider(enum.StrEnum):
     GOOGLE = "google"
 
 

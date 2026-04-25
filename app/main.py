@@ -4,6 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
 
+from app.auth.auth_api import router as auth_router
 from app.core.config import settings
 from app.core.database.mongo import init_db
 from app.core.database.postgres import engine
@@ -39,6 +40,8 @@ app = FastAPI(
     openapi_url=f"{settings.API_V1_STR}/openapi.json",
     lifespan=lifespan,
 )
+
+app.include_router(auth_router)
 
 # Set all CORS enabled origins
 if settings.BACKEND_CORS_ORIGINS:

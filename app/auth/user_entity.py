@@ -13,7 +13,7 @@ if TYPE_CHECKING:
     from app.auth.refresh_token_entity import RefreshToken
 
 
-class UserRole(str, enum.Enum):
+class UserRole(enum.StrEnum):
     USER = "user"
     ADMIN = "admin"
 
