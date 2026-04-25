@@ -19,9 +19,20 @@ class Settings(BaseSettings):
             return v
         raise ValueError(v)
 
-    # Database
+    # MongoDB Settings
     MONGODB_URL: str = "mongodb://localhost:27017"
     MONGODB_DB_NAME: str = "chief_of_staff_db"
+
+    # PostgreSQL Settings
+    POSTGRES_SERVER: str = "localhost"
+    POSTGRES_USER: str = "postgres"
+    POSTGRES_PASSWORD: str = "password"
+    POSTGRES_DB: str = "chief_of_staff_pg"
+    POSTGRES_PORT: int = 5432
+
+    @property
+    def SQLALCHEMY_DATABASE_URI(self) -> str:
+        return f"postgresql+asyncpg://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@{self.POSTGRES_SERVER}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
 
     # App environment
     ENVIRONMENT: str = "dev"

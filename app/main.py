@@ -2,20 +2,36 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy import text
 
 from app.core.config import settings
 from app.core.db import init_db
 from app.core.logger import logger
+from app.core.postgres import engine
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):  # type: ignore
-    # Initialize database
-    client = await init_db()
+    # --- MongoDB ---
+    mongo_client = await init_db()
+
+    # --- PostgreSQL ---
+    try:
+        async with engine.connect() as conn:
+            await conn.execute(text("SELECT 1"))
+        logger.info("Successfully connected to PostgreSQL.")
+    except Exception as e:
+        logger.error(f"Failed to connect to PostgreSQL: {e}")
+        raise RuntimeError("Could not connect to PostgreSQL") from e
+
     yield
-    # Cleanup code
-    client.close()
+
+    # --- Cleanup ---
+    mongo_client.close()
     logger.info("MongoDB connection closed.")
+
+    await engine.dispose()
+    logger.info("PostgreSQL connection pool closed.")
 
 
 app = FastAPI(

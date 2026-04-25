@@ -11,6 +11,10 @@ dependencies = [
     "pydantic>=2.6.4",
     "motor>=3.7.1",
     "beanie>=1.26.0,<2.0.0",
+    "sqlalchemy>=2.0.0",
+    "asyncpg>=0.29.0",
+    "alembic>=1.13.0",
+    "greenlet>=3.0.3",
 ]
 
 [project.optional-dependencies]

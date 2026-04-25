@@ -10,5 +10,19 @@ services:
     volumes:
       - mongodb_data:/data/db
 
+  postgres:
+    image: postgres:16-alpine
+    container_name: chief_of_staff_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: chief_of_staff_pg
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
 volumes:
   mongodb_data:
+  postgres_data:
