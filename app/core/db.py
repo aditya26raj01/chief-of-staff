@@ -20,13 +20,25 @@ async def init_db() -> None:
     """
     logger.info("Initializing MongoDB connection...")
 
-    # Initialize Motor client
-    client: AsyncIOMotorClient[Any] = AsyncIOMotorClient(settings.MONGODB_URL)
+    try:
+        # Initialize Motor client
+        client: AsyncIOMotorClient[Any] = AsyncIOMotorClient(
+            settings.MONGODB_URL,
+            serverSelectionTimeoutMS=5000,  # Fail fast if DB is down
+        )
 
-    # Initialize Beanie with the selected database and document models
-    await init_beanie(
-        database=client[settings.MONGODB_DB_NAME],
-        document_models=DOCUMENT_MODELS,
-    )
+        # Ping the database to verify the connection
+        await client.admin.command("ping")
+        logger.info("Successfully connected to MongoDB.")
 
-    logger.info("MongoDB connection and Beanie ODM initialized.")
+        # Initialize Beanie with the selected database and document models
+        await init_beanie(
+            database=client[settings.MONGODB_DB_NAME],
+            document_models=DOCUMENT_MODELS,
+        )
+
+        logger.info("Beanie ODM initialized successfully.")
+    except Exception as e:
+        logger.error(f"Failed to connect to MongoDB: {e}")
+        # Raising the exception here will cause the FastAPI application startup to fail.
+        raise RuntimeError("Could not connect to MongoDB") from e
