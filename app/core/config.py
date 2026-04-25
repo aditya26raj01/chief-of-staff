@@ -42,6 +42,12 @@ class Settings(BaseSettings):
             url = url.replace("postgresql://", "postgresql+asyncpg://", 1)
 
         parsed = urlparse(url)
+
+        # If the URL has no explicit database path, use POSTGRES_DB_NAME.
+        db_name = self.POSTGRES_DB_NAME.strip().strip("/")
+        if (not parsed.path or parsed.path == "/") and db_name:
+            parsed = parsed._replace(path=f"/{db_name}")
+
         params = parse_qs(parsed.query)
         # Remove params that asyncpg doesn't accept as URL query params
         params.pop("sslmode", None)

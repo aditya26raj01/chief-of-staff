@@ -6,10 +6,13 @@ from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
+from app.auth.oauth_con_entity import OAuthConnection  # noqa: F401
+from app.auth.refresh_token_entity import RefreshToken  # noqa: F401
+from app.auth.user_entity import User  # noqa: F401
+
 # Import your FastAPI settings and declarative base
 from app.core.config import settings
 from app.core.database.pg_base import Base
-from app.user.user_entity import User  # noqa: F401
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

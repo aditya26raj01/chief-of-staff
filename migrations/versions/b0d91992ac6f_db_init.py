@@ -1,16 +1,16 @@
-"""user entity v2
+"""db init
 
-Revision ID: bb83092ee077
-Revises: ca92b549616d
-Create Date: 2026-04-25 16:45:43.643884
+Revision ID: b0d91992ac6f
+Revises: 
+Create Date: 2026-04-25 17:10:10.783597
 
 """
 
 from collections.abc import Sequence
 
 # revision identifiers, used by Alembic.
-revision: str = "bb83092ee077"
-down_revision: str | Sequence[str] | None = "ca92b549616d"
+revision: str = "b0d91992ac6f"
+down_revision: str | Sequence[str] | None = None
 branch_labels: str | Sequence[str] | None = None
 depends_on: str | Sequence[str] | None = None
 
