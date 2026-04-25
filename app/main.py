@@ -5,8 +5,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
 
 from app.core.config import settings
-from app.core.db import init_db
 from app.core.logger import logger
+from app.core.mongo import init_db
 from app.core.postgres import engine
 
 

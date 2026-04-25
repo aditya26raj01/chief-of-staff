@@ -1,8 +1,15 @@
+import ssl as ssl_module
 from collections.abc import AsyncGenerator
 
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
 from app.core.config import settings
+
+# Build connect_args for asyncpg (SSL handled here, not in URL)
+connect_args: dict[str, object] = {}
+if settings.POSTGRES_REQUIRES_SSL:
+    ssl_ctx = ssl_module.create_default_context()
+    connect_args["ssl"] = ssl_ctx
 
 # Create the async engine
 engine = create_async_engine(
@@ -10,6 +17,7 @@ engine = create_async_engine(
     echo=settings.ENVIRONMENT == "dev",  # Log SQL queries in development
     future=True,
     pool_pre_ping=True,  # Check connection health before checking out from pool
+    connect_args=connect_args,
 )
 
 # Create a configured "Session" class

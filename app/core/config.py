@@ -29,11 +29,31 @@ class Settings(BaseSettings):
 
     @property
     def SQLALCHEMY_DATABASE_URI(self) -> str:
-        """Ensure the URL uses the asyncpg driver."""
+        """Build an asyncpg-compatible connection string.
+
+        asyncpg doesn't understand libpq query params like `sslmode` and
+        `channel_binding`, so we strip them from the URL. SSL is handled
+        separately via connect_args in postgres.py.
+        """
+        from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
+
         url = self.POSTGRES_URL
         if url.startswith("postgresql://"):
             url = url.replace("postgresql://", "postgresql+asyncpg://", 1)
-        return url
+
+        parsed = urlparse(url)
+        params = parse_qs(parsed.query)
+        # Remove params that asyncpg doesn't accept as URL query params
+        params.pop("sslmode", None)
+        params.pop("channel_binding", None)
+        clean_query = urlencode(params, doseq=True)
+        cleaned = parsed._replace(query=clean_query)
+        return urlunparse(cleaned)
+
+    @property
+    def POSTGRES_REQUIRES_SSL(self) -> bool:
+        """Check if the original URL requested SSL."""
+        return "sslmode=" in self.POSTGRES_URL
 
     # App environment
     ENVIRONMENT: str = "dev"
